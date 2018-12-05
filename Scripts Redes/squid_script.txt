@@ -1,0 +1,36 @@
+Como configurar um Proxy usando squid
+
+Instalação
+
+	# apt-get install squid
+
+Configuração
+
+	# cd /etc/squid
+	# nano squid.conf
+
+	Os passos a seguir são tods dentro do arquivo "squid.conf"
+	Após isso indicamos qual porta o squid irá trabalhar
+	# http_port 3128
+
+Conceda as permissões
+
+	#http_access allow localhost
+
+	(exemplo com ip)
+	#acl ip_permitido xxx.xxx.xxx.xxx
+	#http_access allow ip_permitdo
+
+	(exemplo com domínio)
+	#acl site_permitido "www.site.com"
+	#http_access allow site_permitido
+
+	(negar tudo no final)
+	#http_access deny all
+
+Reiniciar squid
+
+	Após feito os passos anteriores, reinicie o squid
+	# systemctl restart squid
+
+

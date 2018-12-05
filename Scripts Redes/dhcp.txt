@@ -1,0 +1,28 @@
+Script genérico de como configurar um roteador 
+para que funcione como um DHCP
+###############################################
+
+DHCP (Server):
+conf t 
+ip dhcp pool POOL1
+network XXX.XXX.XXX.XXX /Z (IP /Mascara) 
+dns-server ZZZ.ZZZ.ZZZ.ZZZ (IP do DNS)
+default-router WWW.WWW.WWW.WWW (IP do default gateway)
+lease (quantidade de dias que deve durar o IP)
+end
+sh run
+wr
+
+conf t
+ip dhcp ex (range de IPs a serem excluidos)
+int fx/x
+ip add QQQ.QQQ.QQQ.QQQ PPP.PPP.PPP.PPP
+no shutdown
+wr
+
+DHCP (Roteador)
+conf t
+no ip routing
+int fx/x
+ip add dhcp
+no shut

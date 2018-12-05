@@ -1,0 +1,8 @@
+No servidor Web, é necessário setar "na mão" o IP fixo
+##############################################################
+
+    ifconfig -interface de rede - down
+    ifconfig -interface de rede - XXX.XXX.XXX.XXX up
+
+    ip route add default via GATEWAY PADRÃO (endereço do roteador de borda) 
+    dev (interface de rede)

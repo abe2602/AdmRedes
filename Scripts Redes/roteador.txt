@@ -1,0 +1,23 @@
+Script genérico de como configurar um roteador, 
+tanto nas interfaces Ethernet quanto Serial
+###############################################
+
+ROTEADOR/PC(Fast Ethernet):
+conf t
+int fx/x
+ip add xxx.xxx.xxx.xxx(ip) yyy.yyy.yyy.yyy(mascara)
+no shutdown
+end
+wr
+
+ROTEADOR(Serial):
+conf t
+int sx/x
+ip add yyy.yyy.yyy.yyy(ip) zzz.zzz.zzz.zzz(mascara)
+no shutdown
+end
+
+ADICIONAR ROTAS:
+router rip
+ver 2
+net AAA.AAA.AAA (colocar aqui o ip da rede (ex: 192.168.0.0))

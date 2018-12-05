@@ -1,0 +1,111 @@
+﻿Como configurar Apache Virtual Hosts no Linux
+
+#sudo apt-get update
+#apt-get install apache2
+
+Passo um - Crie a estrutura de diretórios
+
+#sudo mkdir -p /var/www/exemplo.com/public_html
+#sudo mkdir -p /var/www/redes.com/public_html
+
+Passo dois - Conceda Permissões
+
+#sudo chown -R $USER:$USER /var/www/exemplo.com/public_html
+#sudo chown -R $USER:$USER /var/www/redes.com/public_html
+
+A variável $USER terá o valor do usuário com o qual você está 
+logado atualmente quando você pressionou "ENTER".
+
+modificar um pouco nossas permissões para garantir que o acesso 
+de leitura é permitido para o diretório web em geral e todos os 
+arquivos e pastas que ele contém de modo que a páginas possam ser 
+servidas corretamente
+
+#sudo chmod -R 755 /var/www
+
+Passo Três - Crie as Páginas Demo para cada Virtual Host
+
+#nano /var/www/exemplo.com/public_html/index.html
+
+Neste arquivo, crie um documento HTML simples que indica o site que 
+está conectado. Meu arquivo se parece com isso:
+
+<html>
+  <head>
+    <title>Bem vindo ao Exemplo.com!</title>
+  </head>
+  <body>
+    <h1>Success!  O exemplo.com virtual host estar funcionando!</h1>
+  </body>
+</html>
+
+Salve e feche o arquivo quando terminar.
+
+Podemos copiar este arquivo para usá-lo como base para nosso segundo site digitando:
+
+#cp /var/www/exemplo.com/public_html/index.html 
+
+/var/www/redes.com/public_html/index.html
+
+Podemos, então, abrir o arquivo e modificar as informações pertinentes:
+
+#nano /var/www/redes.com/public_html/index.html
+
+Passo Quatro - Crie novos arquivos de Virtual Hosts
+
+Crie o primeiro arquivo de Virtual Host
+
+#sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/exemplo.com.conf
+
+Abra o novo arquivo em seu editor com privilégios de root:
+
+#sudo nano /etc/apache2/sites-available/exemplo.com.conf
+
+O arquivo será algo parecido com isso (eu removi os comentários aqui para tornar o arquivo mais acessível):
+
+<VirtualHost *:80>
+    ServerName exemplo.com
+	ServerAlias www.exemplo.com
+
+	ServerAdmin antonio@usp.br
+    DocumentRoot /var/www/exemplo.com/public_html
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+Salve e feche o arquivo.
+
+Copie o primeiro Virtual Host e personalize-o para o Segundo Domínio
+
+Passo Cinco - Ative os novos arquivos de Virtual Host
+
+Utilizar a ferramenta a2ensite para ativar cada um de nossos sites assim:
+
+#sudo a2ensite exemplo.com.conf
+#sudo a2ensite redes.com.conf
+
+Quando terminar, você precisará reiniciar o Apache para fazer com que estas 
+alterações tenham efeito:
+
+#sudo service apache2 restart/
+
+Você provavelmente irá receber uma mensagem dizendo algo como:
+
+*Restarting web server apache2
+AH00558: apache2: Could not reliably determine the server's fully qualified 
+domain name, using 127.0.0.1. Set the 'ServerName' directive globally to suppress 
+this message
+
+Passo Seis - Configure o arquivo de hosts local (Opcional)
+
+#sudo nano /etc/hosts
+
+127.0.0.1 exemplo.com
+127.0.0.1 redes.com
+
+Passo Sete - Teste seus resultados
+
+#curl -v http://www.exemplo.com
+#curl -v http://www.redes.com
+
+ou acesse o endereço em um navegador web.
